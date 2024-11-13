@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bash scripts &mdash; Car Detection Mlops  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Deploy API module" href="deploy_API.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Car Detection Mlops
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_startup.html">Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_data_versioning.html">Steps for data versioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_training.html">Steps for training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_deploy.html">Steps for deploying</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="train.html">Train module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="predict.html">Predict module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset.html">Dataset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="s3_bucket.html">S3 Bucket module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lambda_function.html">Lambda Function module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deploy_API.html">Deploy API module</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Bash scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configure-dvc-sh">configure_dvc.sh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-sh">data.sh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#new-dataset-version-sh">new_dataset_version.sh</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#yml-script">YML script</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#workflow-yml">workflow.yml</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Car Detection Mlops</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Bash scripts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/scripts.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="bash-scripts">
+<h1>Bash scripts<a class="headerlink" href="#bash-scripts" title="Link to this heading"></a></h1>
+<p>In this project, three bash scripts were used to automate processes:</p>
+<section id="configure-dvc-sh">
+<h2>configure_dvc.sh<a class="headerlink" href="#configure-dvc-sh" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1"># Remove DVC files</span>
+rm<span class="w"> </span>-rf<span class="w"> </span>.dvc/<span class="w"> </span>data/data.zip.dvc<span class="w"> </span>.dvcignore
+
+<span class="nv">BUCKET_NAME</span><span class="o">=</span><span class="nv">$1</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BUCKET_NAME</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Error: BUCKET_NAME parameter is missing.&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Usage: </span><span class="nv">$0</span><span class="s2"> &lt;bucket_name&gt;&quot;</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+
+dvc<span class="w"> </span>init
+
+dvc<span class="w"> </span>add<span class="w"> </span>data/data.zip
+
+git<span class="w"> </span>add<span class="w"> </span>data/data.zip.dvc<span class="w"> </span>
+
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add data to project&quot;</span>
+
+git<span class="w"> </span>push
+
+<span class="c1"># Add connection to the S3 bucket</span>
+dvc<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>-f<span class="w"> </span>myremote<span class="w"> </span>s3://<span class="s2">&quot;</span><span class="nv">$BUCKET_NAME</span><span class="s2">&quot;</span>
+
+dvc<span class="w"> </span>remote<span class="w"> </span>default<span class="w"> </span>myremote
+
+dvc<span class="w"> </span>push
+
+git<span class="w"> </span>add<span class="w"> </span>.
+
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;version 0&quot;</span>
+
+git<span class="w"> </span>push
+
+<span class="c1"># Create first tag and send it to remote</span>
+git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>v0.0.0<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Release version 0.0.0&quot;</span>
+
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>tag<span class="w"> </span>v0.0.0
+</pre></div>
+</div>
+</section>
+<section id="data-sh">
+<h2>data.sh<a class="headerlink" href="#data-sh" title="Link to this heading"></a></h2>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="nb">set</span><span class="w"> </span>-e
+
+<span class="nv">DROP</span><span class="o">=</span><span class="nv">$1</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DROP</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Error: DROP parameter is missing. See data/preprocess.py for more.&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Usage: </span><span class="nv">$0</span><span class="s2"> &lt;drop_value&gt;&quot;</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+
+python3<span class="w"> </span>data/dataset.py<span class="w"> </span>--drop<span class="w"> </span><span class="nv">$DROP</span><span class="w"> </span>--download_data
+
+zip<span class="w"> </span>-r<span class="w"> </span>data/data.zip<span class="w"> </span>data/data/
+
+rm<span class="w"> </span>-r<span class="w"> </span>data/data/
+</pre></div>
+</div>
+</section>
+<section id="new-dataset-version-sh">
+<h2>new_dataset_version.sh<a class="headerlink" href="#new-dataset-version-sh" title="Link to this heading"></a></h2>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="nb">set</span><span class="w"> </span>-e<span class="w"> </span>
+
+<span class="nv">VERSION</span><span class="o">=</span><span class="nv">$1</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Commit data/data.zip and push to the bucket&quot;</span>
+dvc<span class="w"> </span>commit<span class="w"> </span>data/data.zip
+dvc<span class="w"> </span>push
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;commit to github&quot;</span>
+git<span class="w"> </span>add<span class="w"> </span>.
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;version </span><span class="nv">$VERSION</span><span class="s2">&quot;</span>
+git<span class="w"> </span>push
+
+git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span><span class="nv">$VERSION</span><span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Release version </span><span class="nv">$VERSION</span><span class="s2">&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Tag created&quot;</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;pushing to github...&quot;</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>tag<span class="w"> </span><span class="nv">$VERSION</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Push complete!&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="yml-script">
+<h1>YML script<a class="headerlink" href="#yml-script" title="Link to this heading"></a></h1>
+<section id="workflow-yml">
+<h2>workflow.yml<a class="headerlink" href="#workflow-yml" title="Link to this heading"></a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">API Endpoint deploy with AWS lambda function inside ECR</span>
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">Amazon-ECR-Image</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">        </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">AWS_ACCESS_KEY_ID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_ACCESS_KEY_ID }}</span>
+<span class="w">            </span><span class="nt">AWS_SECRET_ACCESS_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_SECRET_ACCESS_KEY }}</span>
+<span class="w">            </span><span class="nt">AWS_REGION</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_REGION }}</span>
+<span class="w">        </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout code</span>
+<span class="w">              </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure AWS credentials</span>
+<span class="w">              </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-actions/configure-aws-credentials@v4</span>
+<span class="w">              </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">aws-access-key-id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_ACCESS_KEY_ID }}</span>
+<span class="w">                </span><span class="nt">aws-secret-access-key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_SECRET_ACCESS_KEY }}</span>
+<span class="w">                </span><span class="nt">aws-region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_REGION }}</span>
+<span class="w">            </span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create ECR repository</span>
+<span class="w">              </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">                </span><span class="no">aws ecr describe-repositories --repository-names &quot;${{ secrets.ECR_NAME }}&quot; &gt; /dev/null 2&gt;&amp;1 || \</span>
+<span class="w">                </span><span class="no">aws ecr create-repository --repository-name &quot;${{ secrets.ECR_NAME }}&quot; --image-scanning-configuration scanOnPush=true --image-tag-mutability MUTABLE --query &#39;repository.{repositoryArn:repositoryArn, repositoryUri:repositoryUri}&#39;</span>
+<span class="w">              </span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Login to Amazon ECR</span>
+<span class="w">              </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">login-ecr</span>
+<span class="w">              </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-actions/amazon-ecr-login@v2</span>
+<span class="w">              </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">mask-password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
+
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build, tag, and push image to Amazon ECR</span>
+<span class="w">              </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">ECR_REGISTRY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ steps.login-ecr.outputs.registry }}</span>
+<span class="w">                </span><span class="nt">ECR_REPOSITORY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.ECR_NAME }}</span>
+<span class="w">                </span><span class="nt">IMAGE_TAG</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span>
+<span class="w">              </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">                </span><span class="no">docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --platform linux/amd64 -f deploy/Dockerfile .</span>
+<span class="w">                </span><span class="no">docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG</span>
+<span class="w">            </span>
+<span class="w">    </span><span class="nt">Create-API-Endpoint</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">        </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Amazon-ECR-Image</span>
+<span class="w">        </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">AWS_ACCESS_KEY_ID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_ACCESS_KEY_ID }}</span>
+<span class="w">            </span><span class="nt">AWS_SECRET_ACCESS_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_SECRET_ACCESS_KEY }}</span>
+<span class="w">            </span><span class="nt">AWS_REGION</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_REGION }}</span>
+<span class="w">            </span><span class="nt">AWS_LAMBDA_ROLE_ARN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_LAMBDA_ROLE_ARN }}</span>
+<span class="w">            </span><span class="nt">BUCKET_MODEL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{secrets.BUCKET_MODEL}}</span>
+<span class="w">        </span><span class="nt">outputs</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{steps.create_endpoint.outputs.api_endpoint}}</span>
+<span class="w">        </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout code</span>
+<span class="w">            </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python</span>
+<span class="w">            </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v5</span>
+<span class="w">            </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.12&#39;</span>
+
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<span class="w">            </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip install -r deploy/requirements/create_lambda_requirements.txt</span>
+
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create Endpoint</span>
+<span class="w">            </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create_endpoint</span>
+<span class="w">            </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">              </span><span class="no">endpoint=$(python deploy/deploy_API.py --image_uri ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.${{secrets.AWS_REGION}}.amazonaws.com/${{secrets.ECR_NAME}}:latest --api_gateway demo_project_pedroatp)</span>
+<span class="w">              </span><span class="no">echo &quot;api_endpoint=$endpoint&quot; &gt;&gt; &quot;$GITHUB_OUTPUT&quot;</span>
+<span class="w">    </span><span class="nt">Run-Tests</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">      </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create-API-Endpoint</span>
+<span class="w">      </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">ENDPOINT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{needs.Create-API-Endpoint.outputs.api_endpoint}}</span>
+<span class="w">            </span><span class="nt">AWS_REGION</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_REGION }}</span>
+<span class="w">      </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout code</span>
+<span class="w">          </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python</span>
+<span class="w">          </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v5</span>
+<span class="w">          </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.12&#39;</span>
+
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<span class="w">          </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip install -r tests/requirements.txt</span>
+
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run pytest</span>
+<span class="w">          </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest tests/test_predict.py</span>
+
+<span class="w">          </span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="deploy_API.html" class="btn btn-neutral float-left" title="Deploy API module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Pedro Altobelli.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

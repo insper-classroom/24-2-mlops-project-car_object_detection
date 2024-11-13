@@ -1,0 +1,191 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Steps for data versioning &mdash; Car Detection Mlops  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Steps for training" href="tutorial_training.html" />
+    <link rel="prev" title="Startup" href="tutorial_startup.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Car Detection Mlops
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial_startup.html">Startup</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Steps for data versioning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#create-a-new-data-enviroment">Create a new data enviroment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-a-new-dataset-version">Create a new dataset version</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_training.html">Steps for training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_deploy.html">Steps for deploying</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="train.html">Train module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="predict.html">Predict module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset.html">Dataset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="s3_bucket.html">S3 Bucket module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lambda_function.html">Lambda Function module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deploy_API.html">Deploy API module</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Bash scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html#yml-script">YML script</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Car Detection Mlops</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Steps for data versioning</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial_data_versioning.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="steps-for-data-versioning">
+<h1>Steps for data versioning<a class="headerlink" href="#steps-for-data-versioning" title="Link to this heading"></a></h1>
+<p>Data versioning is a essencial step in any Machine Learning projects. It enables developer’s teams to create multiple datasets and easily change between them when training. It is useful when the team have a lot of data and is trying to use only the samples that increase model performance. In this project <a class="reference external" href="https://dvc.org/doc/api-reference">dvc</a> combined with git is used to implement this task. All datasets versions are stored at a S3 bucket.</p>
+<p>see <a class="reference internal" href="tutorial_startup.html"><span class="std std-doc">“Startup”</span></a> before this one.</p>
+<section id="create-a-new-data-enviroment">
+<h2>Create a new data enviroment<a class="headerlink" href="#create-a-new-data-enviroment" title="Link to this heading"></a></h2>
+<p>Sometimes, it is necessary to start everything all again. The following steps show how can you do that:</p>
+<ol class="arabic simple">
+<li><p>Remove all tags already created (remote and local)</p></li>
+</ol>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span><span class="k">$(</span>git<span class="w"> </span>tag<span class="w"> </span>-l<span class="k">)</span>
+
+git<span class="w"> </span>tag<span class="w"> </span>-d<span class="w"> </span><span class="k">$(</span>git<span class="w"> </span>tag<span class="w"> </span>-l<span class="k">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Ensure the tags were erased:</p></li>
+</ul>
+<p><img alt="tags_erased" src="_images/tags_erased.png" /></p>
+<ol class="arabic simple" start="2">
+<li><p>Run `data.sh to create the file “data/data.zip” with your preprocessed data. Drop value is the ratio of the dowloaded dataset that will be erased.</p></li>
+</ol>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>./scripts/data.sh<span class="w"> </span>&lt;drop_value&gt;
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">configure_dvc.sh</span></code> and pass as argument the Bucket created for the dataset</p></li>
+</ol>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>./scrips/configure_dvc.sh<span class="w"> </span>bucket-dataset-name
+</pre></div>
+</div>
+<p>After that, you will have a tag v0.0.0 with the first version of the dataset!</p>
+</section>
+<section id="create-a-new-dataset-version">
+<h2>Create a new dataset version<a class="headerlink" href="#create-a-new-dataset-version" title="Link to this heading"></a></h2>
+<p>Everytime you want to create a new dataset version, run the steps bellow:</p>
+<ol class="arabic simple">
+<li><p>Do changes in the function prepocess from <code class="docutils literal notranslate"><span class="pre">dataset.py</span></code>. Then, run <code class="docutils literal notranslate"><span class="pre">data.sh</span></code>:</p></li>
+</ol>
+<div class="warning admonition">
+<p class="admonition-title">WARNING</p>
+<p>Check if you are at main:</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>main
+</pre></div>
+</div>
+</div>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>./scrips/data.sh<span class="w"> </span>&lt;drop_value&gt;
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">new_dataset_version.sh</span></code> script to create new data version:</p></li>
+</ol>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>./scripts/new_dataset_version.sh<span class="w"> </span>vA.B.C
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>To use a specific data version:</p></li>
+</ol>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>vA.B.C
+dvc<span class="w"> </span>checkout
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial_startup.html" class="btn btn-neutral float-left" title="Startup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial_training.html" class="btn btn-neutral float-right" title="Steps for training" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Pedro Altobelli.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
