@@ -54,7 +54,17 @@
 <li class="toctree-l1"><a class="reference internal" href="train.html">Train module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="predict.html">Predict module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dataset.html">Dataset module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">S3 Bucket module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">S3 Bucket module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#s3_bucket.S3_Bucket"><code class="docutils literal notranslate"><span class="pre">S3_Bucket</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#s3_bucket.S3_Bucket.add_file_model_S3_bucket"><code class="docutils literal notranslate"><span class="pre">S3_Bucket.add_file_model_S3_bucket()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#s3_bucket.S3_Bucket.create_S3_bucket"><code class="docutils literal notranslate"><span class="pre">S3_Bucket.create_S3_bucket()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#s3_bucket.S3_Bucket.delete_S3_bucket"><code class="docutils literal notranslate"><span class="pre">S3_Bucket.delete_S3_bucket()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#s3_bucket.S3_Bucket.handle_arguments"><code class="docutils literal notranslate"><span class="pre">S3_Bucket.handle_arguments()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#s3_bucket.S3_Bucket.list_S3_buckets"><code class="docutils literal notranslate"><span class="pre">S3_Bucket.list_S3_buckets()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="lambda_function.html">Lambda Function module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deploy_API.html">Deploy API module</a></li>
 </ul>
@@ -88,8 +98,80 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="s3-bucket-module">
-<h1>S3 Bucket module<a class="headerlink" href="#s3-bucket-module" title="Link to this heading"></a></h1>
+  <section id="module-s3_bucket">
+<span id="s3-bucket-module"></span><h1>S3 Bucket module<a class="headerlink" href="#module-s3_bucket" title="Link to this heading"></a></h1>
+<p>S3_Bucket class for creation, deletion and listing S3 buckets. Also for adding files to specific Bucket. Logs are saved in logs/s3.log</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="s3_bucket.S3_Bucket">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">s3_bucket.</span></span><span class="sig-name descname"><span class="pre">S3_Bucket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_key_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret_access_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#s3_bucket.S3_Bucket" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="s3_bucket.S3_Bucket.add_file_model_S3_bucket">
+<span class="sig-name descname"><span class="pre">add_file_model_S3_bucket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#s3_bucket.S3_Bucket.add_file_model_S3_bucket" title="Link to this definition"></a></dt>
+<dd><p>Upload a file to S3 bucket.</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<p>bucket_name (str): Name of the S3 bucket where the file will be stored.
+file_path (str): Path to the file to be uploaded.
+object_name (str): Name (with file extension) of the object in S3.</p>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<p>bool: True if file upload is successful, False otherwise.</p>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="s3_bucket.S3_Bucket.create_S3_bucket">
+<span class="sig-name descname"><span class="pre">create_S3_bucket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'model'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#s3_bucket.S3_Bucket.create_S3_bucket" title="Link to this definition"></a></dt>
+<dd><p>Create an S3 bucket with the specified bucket name and type (model or dataset)</p>
+<section id="id1">
+<h2>Parameters:<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>bucket_name (str): Name of the S3 bucket to create.
+type (str): Type of bucket, either “model” or “dataset”. Defaults to “model”. If type is “model”, will save in the .env file as BUCKET_MODEL, otherwise, will save as BUCKET_DATASET</p>
+</section>
+<section id="id2">
+<h2>Returns:<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>bool: True if bucket creation is successful, False otherwise.</p>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="s3_bucket.S3_Bucket.delete_S3_bucket">
+<span class="sig-name descname"><span class="pre">delete_S3_bucket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#s3_bucket.S3_Bucket.delete_S3_bucket" title="Link to this definition"></a></dt>
+<dd><p>Delete S3 bucket and all objects within it.</p>
+<section id="id3">
+<h2>Parameters:<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>bucket_name (str): Name of the S3 bucket to delete.</p>
+</section>
+<section id="id4">
+<h2>Returns:<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>bool: True if bucket deletion is successful, False otherwise.</p>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="s3_bucket.S3_Bucket.handle_arguments">
+<span class="sig-name descname"><span class="pre">handle_arguments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#s3_bucket.S3_Bucket.handle_arguments" title="Link to this definition"></a></dt>
+<dd><p>Handle commandline arguments for bucket actions and file uploads.</p>
+<section id="id5">
+<h2>Parameters:<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>args (argparse.Namespace): Parsed commandline arguments.</p>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="s3_bucket.S3_Bucket.list_S3_buckets">
+<span class="sig-name descname"><span class="pre">list_S3_buckets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#s3_bucket.S3_Bucket.list_S3_buckets" title="Link to this definition"></a></dt>
+<dd><p>List all S3 buckets in the AWS account.</p>
+<section id="id6">
+<h2>Returns:<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<p>bool: True if listing is successful, False otherwise.</p>
+</section>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 

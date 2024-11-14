@@ -56,7 +56,15 @@
 <li class="toctree-l1"><a class="reference internal" href="dataset.html">Dataset module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="s3_bucket.html">S3 Bucket module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lambda_function.html">Lambda Function module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Deploy API module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Deploy API module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#deploy_API.Deployment"><code class="docutils literal notranslate"><span class="pre">Deployment</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#deploy_API.Deployment.create_API"><code class="docutils literal notranslate"><span class="pre">Deployment.create_API()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deploy_API.Deployment.create_lambda_function"><code class="docutils literal notranslate"><span class="pre">Deployment.create_lambda_function()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deploy_API.Deployment.full_deploy"><code class="docutils literal notranslate"><span class="pre">Deployment.full_deploy()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Scripts:</span></p>
 <ul>
@@ -88,8 +96,70 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="deploy-api-module">
-<h1>Deploy API module<a class="headerlink" href="#deploy-api-module" title="Link to this heading"></a></h1>
+  <section id="module-deploy_API">
+<span id="deploy-api-module"></span><h1>Deploy API module<a class="headerlink" href="#module-deploy_API" title="Link to this heading"></a></h1>
+<p>This script automates the deployment of an AWS Lambda function using an ECR Image and integrates it with an API Gateway for HTTP/HTTPS access. 
+The <cite>Deployment</cite> class handle the creation and configuration of the Lambda function and API Gateway.</p>
+<p>The script uses environment variables for AWS credentials and Lambda configuration, and uses <cite>argparse</cite> to handle commandline arguments. 
+This feature is important to automate the deploy using github actions, allowing to set the API endpoint as the output of this script
+and pass as argument the URI of an ECR Image and the name for the API gateway.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="deploy_API.Deployment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deploy_API.</span></span><span class="sig-name descname"><span class="pre">Deployment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lambda_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_key_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret_access_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_role_arn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deploy_API.Deployment" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to handle AWS Lmabda function deployment inside the ECR container and API Gateway integration.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="deploy_API.Deployment.create_API">
+<span class="sig-name descname"><span class="pre">create_API</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_gateway_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deploy_API.Deployment.create_API" title="Link to this definition"></a></dt>
+<dd><p>Creates an API Gateway with an HTTP POST endpoint to expose the Lambda function.</p>
+<p>Sets up permissions to allow the API Gateway to invoke the Lambda function and generates
+a unique API Gateway endpoint URL for access.</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>api_gateway_name<span class="classifier">str</span></dt><dd><p>The name of the API Gateway to be created.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deploy_API.Deployment.create_lambda_function">
+<span class="sig-name descname"><span class="pre">create_lambda_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_uri</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deploy_API.Deployment.create_lambda_function" title="Link to this definition"></a></dt>
+<dd><p>Creates Lambda function using specified ECR image URI.</p>
+<p>If the Lambda function already exists, it deletes the function before creating a new one.
+Configures the Lambda function with environment variables for S3 bucket access and AWS credentials.</p>
+<section id="id1">
+<h2>Parameters:<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>image_uri<span class="classifier">str</span></dt><dd><p>The URI of the container image in ECR to be used for Lambda deployment.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>bool</dt><dd><p>True if the Lambda function creation is successful, False otherwise.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deploy_API.Deployment.full_deploy">
+<span class="sig-name descname"><span class="pre">full_deploy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deploy_API.Deployment.full_deploy" title="Link to this definition"></a></dt>
+<dd><p>Performs a full deployment process. Integration between lambda function and API.</p>
+<section id="id2">
+<h2>Parameters:<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>args<span class="classifier">Namespace</span></dt><dd><p>Parsed commandline arguments containing <cite>image_uri</cite> for the ECR URI and <cite>api_gateway</cite> for the API name.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 

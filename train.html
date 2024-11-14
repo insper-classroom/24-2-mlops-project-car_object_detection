@@ -51,7 +51,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Train module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Train module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#train.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#train.train_with_YOLO"><code class="docutils literal notranslate"><span class="pre">train_with_YOLO()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="predict.html">Predict module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dataset.html">Dataset module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="s3_bucket.html">S3 Bucket module</a></li>
@@ -88,8 +92,53 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="train-module">
-<h1>Train module<a class="headerlink" href="#train-module" title="Link to this heading"></a></h1>
+  <section id="module-train">
+<span id="train-module"></span><h1>Train module<a class="headerlink" href="#module-train" title="Link to this heading"></a></h1>
+<p>Model training with YOLOv8.</p>
+<ul class="simple">
+<li><p>Mlflow: Model tracking. Can access in localhost:5000.</p></li>
+<li><p>boto3: Connect to S3 bucket</p></li>
+</ul>
+<p>User can easily modify hiperparameters used for training. Logs are saved in logs/model_train.log. Model is saved in .onnx format. 
+This format is lighter and for predictions, it is not necessary to install pytorch and ultralytics packages.
+Very useful to make the ECR Docker lighter.
+The only difference is that it is necessary to do some preprocessing, that is described in the lambda function.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="train.main">
+<span class="sig-prename descclassname"><span class="pre">train.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#train.main" title="Link to this definition"></a></dt>
+<dd><p>Train a YOLO model using specified hyperparameters and save the trained model to an S3 bucket.</p>
+<p>This function initializes a YOLO model, trains it on the Stanford car dataset using the provided
+hyperparameters, and then exports the best model in ONNX format. The trained model is uploaded
+to an S3 bucket for storage.</p>
+<p>Set mlflow to save tracking inside folder model/runs/mlflow. Logs are saved in logs/model_train.log.</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>hp<span class="classifier">dict</span></dt><dd><p>A dictionary containing hyperparameters for training, including:</p>
+<ul class="simple">
+<li><p>‘epochs’ (int): Number of training epochs.</p></li>
+<li><p>‘imgsz’ (int): Image size for training.</p></li>
+<li><p>‘scale’ (float): Scaling factor for augmentation.</p></li>
+<li><p>‘batch’ (int): Batch size for training.</p></li>
+<li><p>‘optimizer’ (str): Optimizer to use for training.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>bool</dt><dd><p>True if training was successful and the model was uploaded to the S3 bucket, False otherwise.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="train.train_with_YOLO">
+<span class="sig-prename descclassname"><span class="pre">train.</span></span><span class="sig-name descname"><span class="pre">train_with_YOLO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#train.train_with_YOLO" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 
 
