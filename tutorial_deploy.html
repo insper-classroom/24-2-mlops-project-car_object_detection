@@ -290,6 +290,16 @@ git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </
 <p><img alt="api_endpoint_actions" src="_images/api_endpoint_actions.png" /></p>
 <p>The URL for the heroku application can be found in:</p>
 <p><img alt="heroku_app_url" src="_images/heroku_app_url.png" /></p>
+<ol class="arabic simple" start="4">
+<li><p>If you would like to do changes on the documentation, it is necessary to do a push directly to the main.</p></li>
+</ol>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>.
+
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Doc changes&quot;</span>
+
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main
+</pre></div>
+</div>
 <p>The URL for the documentation will be a github page in your account.</p>
 <p><img alt="deployment_docs" src="_images/deployment_docs.png" /></p>
 <p>After deploying you might want to see the logs from the lambda function. To do that, use the script “logs/see_logs_lambda.py”</p>
