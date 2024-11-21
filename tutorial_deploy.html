@@ -261,13 +261,30 @@
         <article role="main" id="furo-main-content">
           <section id="steps-for-deploying">
 <h1>Steps for deploying<a class="headerlink" href="#steps-for-deploying" title="Link to this heading">¶</a></h1>
-<p>To make your own deploy of the website, it is necessary do the following steps:</p>
+<p>To make your own deploy of the website, it is necessary do the following steps first:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="tutorial_startup.html"><span class="std std-doc">Startup</span></a></p></li>
 <li><p><a class="reference internal" href="tutorial_data_versioning.html"><span class="std std-doc">steps for data versioning</span></a></p></li>
 <li><p><a class="reference internal" href="tutorial_training.html"><span class="std std-doc">Steps for training</span></a></p></li>
 </ul>
-<p>For deploying the model do a git push to the main. Go to the section Actions in the repository to see all the details from the workflow. To understand more about the CI/CD process for this project, see <a class="reference internal" href="scripts.html"><span class="std std-doc">scripts</span></a>.</p>
+<ol class="arabic simple">
+<li><p>After training, verify the logs from <code class="docutils literal notranslate"><span class="pre">logs\model_train</span></code> to make sure the model was properly saved in the S3 bucket.</p></li>
+<li><p>Create a branch for the specific dataset version in use:</p></li>
+</ol>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>branch-vA.B.C
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Then, add the changes, commit and push branch to origin</p></li>
+</ol>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>.
+
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;changes&quot;</span>
+
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>branch-vA.B.C
+</pre></div>
+</div>
+<p>This will activate github workflow that will do all the necessary steps for a smoth deploy! Go to the section Actions in the repository webpage to see all the details from the workflow. To understand more about the CI/CD process for this project, see <a class="reference internal" href="scripts.html"><span class="std std-doc">scripts</span></a>.</p>
 <p><img alt="github_actions_working" src="_images/github_actions_working.png" /></p>
 <p>Go to the job <code class="docutils literal notranslate"><span class="pre">Run-Tests</span></code> to find the API Endpoint. <code class="docutils literal notranslate"><span class="pre">REGION</span></code> is the <code class="docutils literal notranslate"><span class="pre">AWS_REGION</span></code> for secrets.</p>
 <p><img alt="api_endpoint_actions" src="_images/api_endpoint_actions.png" /></p>

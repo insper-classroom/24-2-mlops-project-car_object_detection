@@ -284,7 +284,7 @@ dvc<span class="w"> </span>add<span class="w"> </span>data/data.zip
 
 git<span class="w"> </span>add<span class="w"> </span>data/data.zip.dvc<span class="w"> </span>
 
-git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add data to project&quot;</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add data to project [skip ci]&quot;</span>
 
 git<span class="w"> </span>push
 
@@ -297,7 +297,7 @@ dvc<span class="w"> </span>push
 
 git<span class="w"> </span>add<span class="w"> </span>.
 
-git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;version 0&quot;</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;version 0 [skip ci]&quot;</span>
 
 git<span class="w"> </span>push
 
@@ -345,7 +345,7 @@ dvc<span class="w"> </span>push
 
 <span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;commit to github&quot;</span>
 git<span class="w"> </span>add<span class="w"> </span>.
-git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;version </span><span class="nv">$VERSION</span><span class="s2">&quot;</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;version </span><span class="nv">$VERSION</span><span class="s2"> [skip ci]&quot;</span>
 git<span class="w"> </span>push
 
 git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span><span class="nv">$VERSION</span><span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Release version </span><span class="nv">$VERSION</span><span class="s2">&quot;</span>
@@ -470,46 +470,57 @@ git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </
 <span class="w">          </span><span class="nt">env</span><span class="p">:</span>
 <span class="w">            </span><span class="nt">HD_ENDPOINT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ needs.Create-API-Endpoint.outputs.api_endpoint }}</span>
 <span class="w">            </span><span class="nt">HD_AWS_REGION</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_REGION }}</span>
-<span class="w">    </span><span class="nt">deploy-docs</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
-<span class="w">      </span><span class="nt">permissions</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
-<span class="w">      </span><span class="nt">steps</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+</pre></div>
+</div>
+</section>
+<section id="workflow-docs-yml">
+<h2>workflow_docs.yml<a class="headerlink" href="#workflow-docs-yml" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>name: Deploy documentation to github pages
+on:
+  push:
+    branches:
+      - main
+jobs:
+    deploy-docs:
+      runs-on: ubuntu-latest
+      permissions:
+        contents: write
+      steps:
+        - uses: actions/checkout@v4
 
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Setup Python</span>
-<span class="w">          </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v5</span>
-<span class="w">          </span><span class="nt">with</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.12&#39;</span>
+        - name: Setup Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: &#39;3.12&#39;
 
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upgrade pip</span>
-<span class="w">          </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python -m pip install --upgrade pip</span>
+        - name: Upgrade pip
+          run: python -m pip install --upgrade pip
 
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get pip cache dir</span>
-<span class="w">          </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip-cache</span>
-<span class="w">          </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;dir=$(pip cache dir)&quot; &gt;&gt; $GITHUB_OUTPUT</span>
+        - name: Get pip cache dir
+          id: pip-cache
+          run: echo &quot;dir=$(pip cache dir)&quot; &gt;&gt; $GITHUB_OUTPUT
 
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cache dependencies</span>
-<span class="w">          </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/cache@v4</span>
-<span class="w">          </span><span class="nt">with</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ steps.pip-cache.outputs.dir }}</span>
-<span class="w">            </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ runner.os }}-pip-${{ hashFiles(&#39;**/requirements.txt&#39;) }}</span>
-<span class="w">            </span><span class="nt">restore-keys</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">              </span><span class="no">${{ runner.os }}-pip-</span>
+        - name: Cache dependencies
+          uses: actions/cache@v4
+          with:
+            path: ${{ steps.pip-cache.outputs.dir }}
+            key: ${{ runner.os }}-pip-${{ hashFiles(&#39;**/requirements.txt&#39;) }}
+            restore-keys: |
+              ${{ runner.os }}-pip-
 
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
-<span class="w">          </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python -m pip install -r ./requirements.txt</span>
+        - name: Install dependencies
+          run: python -m pip install -r ./requirements.txt
 
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build documentation</span>
-<span class="w">          </span><span class="nt">working-directory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./docs</span>
-<span class="w">          </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">make html</span>
+        - name: Build documentation
+          working-directory: ./docs
+          run: make html
 
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy</span>
-<span class="w">          </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">peaceiris/actions-gh-pages@v4</span>
-<span class="w">          </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.ref == &#39;refs/heads/main&#39;</span>
-<span class="w">          </span><span class="nt">with</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">github_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span>
-<span class="w">            </span><span class="nt">publish_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./docs/_build/html</span>
+        - name: Deploy
+          uses: peaceiris/actions-gh-pages@v4
+          if: github.ref == &#39;refs/heads/main&#39;
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: ./docs/_build/html
 </pre></div>
 </div>
 </section>
@@ -570,6 +581,7 @@ git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </
 </li>
 <li><a class="reference internal" href="#yml-script">YML script</a><ul>
 <li><a class="reference internal" href="#workflow-yml">workflow.yml</a></li>
+<li><a class="reference internal" href="#workflow-docs-yml">workflow_docs.yml</a></li>
 </ul>
 </li>
 </ul>

@@ -294,7 +294,7 @@ git<span class="w"> </span>tag<span class="w"> </span>-d<span class="w"> </span>
 </section>
 <section id="create-a-new-dataset-version">
 <h2>Create a new dataset version<a class="headerlink" href="#create-a-new-dataset-version" title="Link to this heading">¶</a></h2>
-<p>Everytime you want to create a new dataset version, run the steps bellow:</p>
+<p>Everytime you want to create a new dataset version, erase the <code class="docutils literal notranslate"><span class="pre">data.zip</span></code> file and follow the steps bellow:</p>
 <ol class="arabic simple">
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">data.sh</span></code>:</p></li>
 </ol>
@@ -314,8 +314,11 @@ git<span class="w"> </span>tag<span class="w"> </span>-d<span class="w"> </span>
 <div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>./scripts/new_dataset_version.sh<span class="w"> </span>vA.B.C
 </pre></div>
 </div>
-<ol class="arabic simple" start="3">
-<li><p>To use a specific data version:</p></li>
+</section>
+<section id="use-specific-data-version">
+<h2>Use specific data version<a class="headerlink" href="#use-specific-data-version" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Checkout to the tag and do a dvc checkout:</p></li>
 </ol>
 <div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>vA.B.C
 dvc<span class="w"> </span>checkout
@@ -382,6 +385,7 @@ dvc<span class="w"> </span>checkout
 <li><a class="reference internal" href="#">Steps for data versioning</a><ul>
 <li><a class="reference internal" href="#create-a-new-data-enviroment">Create a new data enviroment</a></li>
 <li><a class="reference internal" href="#create-a-new-dataset-version">Create a new dataset version</a></li>
+<li><a class="reference internal" href="#use-specific-data-version">Use specific data version</a></li>
 </ul>
 </li>
 </ul>
