@@ -1,11 +1,15 @@
 # 24-2-mlops-project-car_object_detection
 
+### Author:
+
+- [Pedro Altobelli](https://www.linkedin.com/in/pedro-altobelli-teixeira-pinto-0795a1234/)
+
 Deploy a full Mlops Object detection Web application that detects cars and motobikes!
 
 > [!NOTE]
 > [Documentation](https://insper-classroom.github.io/24-2-mlops-project-car_object_detection/)
 >
-> [Web App](https://car-spotter-pedroatp-0b98836b06bd.herokuapp.com/)
+> [Web App](https://car-spotter-pedro2022-38c05544b275.herokuapp.com/)
 
 ![application](imgs/app.png)
 
