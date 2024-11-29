@@ -10,6 +10,8 @@ Deploy a full Mlops Object detection Web application that detects cars and motob
 > [Documentation](https://insper-classroom.github.io/24-2-mlops-project-car_object_detection/)
 >
 > [Web App](https://car-spotter-pedro2022-38c05544b275.herokuapp.com/)
+>
+> [Video](https://drive.google.com/file/d/1XcR9GWVTDExVaYJ49TRrZ0Q3V_SKJP5I/view?usp=sharing)
 
 ![application](imgs/app.png)
 
